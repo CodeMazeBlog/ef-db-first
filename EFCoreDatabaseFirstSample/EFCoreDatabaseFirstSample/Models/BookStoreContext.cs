@@ -1,6 +1,8 @@
 ﻿using System;
+using System.IO;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.Extensions.Configuration;
 
 namespace EFCoreDatabaseFirstSample.Models
 {
@@ -25,11 +27,24 @@ namespace EFCoreDatabaseFirstSample.Models
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            if (!optionsBuilder.IsConfigured)
+            try
             {
-                optionsBuilder
-                    .UseLazyLoadingProxies()
-                    .UseSqlServer("Server=.;Database=BookStore;Trusted_Connection=True;");
+                IConfigurationBuilder builder = new ConfigurationBuilder()
+                    .SetBasePath(Directory.GetCurrentDirectory())
+                    .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
+
+                IConfigurationRoot configuration = builder.Build();
+                IConfigurationSection configurationSection = configuration.GetSection("ConnectionString").GetSection("BooksDB");
+
+                if (!optionsBuilder.IsConfigured)
+                {
+                    optionsBuilder
+                        .UseLazyLoadingProxies()
+                        .UseSqlServer(configurationSection.Value);
+                }
+            }
+            catch (Exception e)
+            {
             }
         }
 

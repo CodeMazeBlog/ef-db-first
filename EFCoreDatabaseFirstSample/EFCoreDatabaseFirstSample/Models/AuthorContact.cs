@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace EFCoreDatabaseFirstSample.Models
+﻿namespace EFCoreDatabaseFirstSample.Models
 {
     public partial class AuthorContact
     {

@@ -1,6 +1,4 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace EFCoreDatabaseFirstSample.Models
 {
@@ -35,8 +33,6 @@ namespace EFCoreDatabaseFirstSample.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.HasAnnotation("ProductVersion", "2.2.2-servicing-10034");
-
             modelBuilder.Entity<Author>(entity =>
             {
                 entity.Property(e => e.Name)
@@ -48,7 +44,7 @@ namespace EFCoreDatabaseFirstSample.Models
             modelBuilder.Entity<AuthorContact>(entity =>
             {
                 entity.HasKey(e => e.AuthorId)
-                    .HasName("PK__AuthorCo__70DAFC3468B4312C");
+                    .HasName("PK__AuthorCo__70DAFC34A95F26A8");
 
                 entity.Property(e => e.AuthorId).ValueGeneratedNever();
 
@@ -60,7 +56,7 @@ namespace EFCoreDatabaseFirstSample.Models
                     .WithOne(p => p.AuthorContact)
                     .HasForeignKey<AuthorContact>(d => d.AuthorId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__AuthorCon__Autho__1273C1CD");
+                    .HasConstraintName("FK__AuthorCon__Autho__398D8EEE");
             });
 
             modelBuilder.Entity<Book>(entity =>
@@ -73,31 +69,31 @@ namespace EFCoreDatabaseFirstSample.Models
                     .WithMany(p => p.Book)
                     .HasForeignKey(d => d.CategoryId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Book__CategoryId__1920BF5C");
+                    .HasConstraintName("FK__Book__CategoryId__403A8C7D");
 
                 entity.HasOne(d => d.Publisher)
                     .WithMany(p => p.Books)
                     .HasForeignKey(d => d.PublisherId)
                     .OnDelete(DeleteBehavior.Cascade)
-                    .HasConstraintName("FK__Book__PublisherI__1A14E395");
+                    .HasConstraintName("FK__Book__PublisherI__412EB0B6");
             });
 
             modelBuilder.Entity<BookAuthors>(entity =>
             {
                 entity.HasKey(e => new { e.BookId, e.AuthorId })
-                    .HasName("PK__BookAuth__6AED6DC42E30626F");
+                    .HasName("PK__BookAuth__6AED6DC4F50D1BAA");
 
                 entity.HasOne(d => d.Author)
                     .WithMany(p => p.BookAuthors)
                     .HasForeignKey(d => d.AuthorId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__BookAutho__Autho__1DE57479");
+                    .HasConstraintName("FK__BookAutho__Autho__44FF419A");
 
                 entity.HasOne(d => d.Book)
                     .WithMany(p => p.BookAuthors)
                     .HasForeignKey(d => d.BookId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__BookAutho__BookI__1CF15040");
+                    .HasConstraintName("FK__BookAutho__BookI__440B1D61");
             });
 
             modelBuilder.Entity<BookCategory>(entity =>
@@ -115,6 +111,10 @@ namespace EFCoreDatabaseFirstSample.Models
                     .HasColumnName("NAME")
                     .HasMaxLength(100);
             });
+
+            OnModelCreatingPartial(modelBuilder);
         }
+
+        partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
     }
 }
